@@ -11,7 +11,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo "Cloning source code..."
-                git 'https://github.com/srinivasulu2004/python.git'
+    
             }
         }
 
