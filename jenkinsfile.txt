@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'yourdockerhubusername/python-app'
+        IMAGE_NAME = 'srinivasulu2004/repo-1'
         VERSION = "${BUILD_NUMBER}"
     }
 
@@ -10,14 +10,14 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                echo "📥 Cloning source code..."
+                echo "Cloning source code..."
                 git 'https://github.com/yourusername/your-python-repo.git'
             }
         }
 
         stage('Set up Python') {
             steps {
-                echo "🐍 Setting up Python virtual environment..."
+                echo " Setting up Python virtual environment..."
                 sh '''
                     python3 -m venv venv
                     source venv/bin/activate
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                echo "✅ Running unit tests..."
+                echo "Running unit tests..."
                 sh '''
                     source venv/bin/activate
                     pytest || echo "No tests found"
@@ -46,23 +46,19 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
+         stage('Push Image') {
             steps {
-                echo "📤 Pushing Docker image to Docker Hub..."
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $IMAGE_NAME:$VERSION
-                    '''
+                withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
+                    sh 'docker push $IMAGE_NAME:$VERSION'
                 }
             }
         }
 
         stage('Deploy (Optional)') {
             steps {
-                echo "🚀 Deploying container (Example)..."
+                echo " Deploying container (Example)..."
                 sh '''
-                    docker run -d -p 5000:5000 $IMAGE_NAME:$VERSION
+                    docker run --name container1 -d -p 5000:5000 $IMAGE_NAME:$VERSION
                 '''
             }
         }
