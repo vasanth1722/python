@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo "Running unit tests..."
                 sh '''
-                    source venv/bin/activate
+                    . venv/bin/activate
                     pytest || echo "No tests found"
                 '''
             }
