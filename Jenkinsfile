@@ -33,14 +33,6 @@ pipeline {
             }
         }
 
-         stage('Push Image') {
-            steps {
-                withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
-                    sh 'docker push $IMAGE_NAME:$VERSION'
-                }
-            }
-        }
-
         stage('Deploy (Optional)') {
             steps {
                 echo " Deploying container (Example)..."
